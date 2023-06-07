@@ -35,8 +35,7 @@ import sys
 def main():
     target = sys.argv[1]
     compile = Compile(target)
-    compile.solc_parse()
-    for compilation_unit in compile.compile_and_slither_parse()._compilation_units:
+    for compilation_unit in compile.compile._compilation_units:
         for contract in compilation_unit.contracts:
             for function in contract.functions:
                 print(f'{contract}.{function}')
