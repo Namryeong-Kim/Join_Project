@@ -1,19 +1,3 @@
-Metadata-Version: 2.1
-Name: slither-analyzer
-Version: 0.9.3
-Summary: Slither is a Solidity static analysis framework written in Python 3.
-Home-page: https://github.com/crytic/slither
-Author: Trail of Bits
-License: AGPL-3.0
-Platform: UNKNOWN
-Requires-Python: >=3.8
-Description-Content-Type: text/markdown
-Provides-Extra: lint
-Provides-Extra: test
-Provides-Extra: doc
-Provides-Extra: dev
-License-File: LICENSE
-
 # Slither, the Solidity source analyzer
 <img src="./logo.png" alt="Logo" width="500"/>
 
@@ -279,5 +263,3 @@ Title | Usage | Authors | Venue | Code
 [Automated Auditing of Price Gouging TOD Vulnerabilities in Smart Contracts](https://www.cs.toronto.edu/~fanl/papers/price-icbc22.pdf) | Use Slither to extract the CFG and data dependencies| Sidi Mohamed Beillahi, Eric Keilty, Keerthi Nelaturu, Andreas Veneris, and Fan Long | 2022 IEEE International Conference on Blockchain and Cryptocurrency (ICBC) | [Smart-Contract-Repair](https://github.com/Veneris-Group/TOD-Location-Rectification)
 
 If you are using Slither on an academic work, consider applying to the [Crytic $10k Research Prize](https://blog.trailofbits.com/2019/11/13/announcing-the-crytic-10k-research-prize/).
-
-

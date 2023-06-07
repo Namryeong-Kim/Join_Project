@@ -1,4 +1,3 @@
-README.md
 setup.py
 join/__init__.py
 join/__main__.py
