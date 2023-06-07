@@ -1,4 +1,5 @@
-from crytic_compile import CryticCompile, InvalidCompilation
+from crytic_compile.platform.types import Type
+from crytic_compile import CryticCompile
 from join.compile.solc_parse.parser import parse as solc_parse
 from join.compile.compile import Compile
 import sys
@@ -31,12 +32,17 @@ import sys
 
 
 
-
 def main():
     target = sys.argv[1]
     compile = Compile(target)
     compile.solc_parse()
-    print(compile.compile_and_slither_parse())
+    for compilation_unit in compile.compile_and_slither_parse()._compilation_units:
+        for contract in compilation_unit.contracts:
+            for function in contract.functions:
+                print(f'{contract}.{function}')
+    
+    
+
 #argparse
 #solc parse
 #flattening
