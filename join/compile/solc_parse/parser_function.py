@@ -1,25 +1,27 @@
 import sys
 import subprocess
-import re
+import re, os
 import json
-import urllib.request
+import requests
 import join.compile.solc_parse.parser_env as env
-from pyparsing import Regex, Combine, Literal, OneOrMore
+from pyparsing import Regex, Combine, Literal, OneOrMore, Empty
+from pathlib import Path
+from solc_select.solc_select import verify_checksum, get_url
 
 
 def get_solidity_source():
     with open(sys.argv[1], 'r') as f:
+    #with open(file_path, 'r') as f:
         source_code = f.read()
     return source_code
 
 def get_version_list():
     url = f"https://binaries.soliditylang.org/{env.soliditylang_platform()}/list.json"
-    list_json = urllib.request.urlopen(url).read()
-    available_releases = json.loads(list_json)["releases"]
-    available_releases = list(available_releases.keys())
-    sorted_list = sorted(available_releases, key=lambda x: [int(v) for v in x.split('.')])
-
-    return sorted_list
+    list_json = requests.get(url).content
+    releases = json.loads(list_json)["releases"]
+    # available_releases = sorted(releases, key=lambda x: [int(v) for v in x.split('.')])
+    # print(available_releases)
+    return releases
 
 def check_version(version_list, version):
     for v in version:
@@ -76,19 +78,32 @@ def get_highest_version(version_list, target_version):
     for v in version_list:
         if v.startswith(target_major_minor):
             matching_versions.append(v)
-    return matching_versions[-1]
+    return matching_versions[0]
 
 
 def install_solc(version):
-    print('solc-select install', version)
-    subprocess.run(['solc-select', 'install', version],
-                   capture_output=True, text=True)
-    print('solc-select use', version)
-    subprocess.run(['solc-select', 'use', version],
-                   capture_output=True, text=True)
-    # print('slither', sys.argv[1])
-    # result = subprocess.run(['slither', sys.argv[1]], capture_output=True, text=True).stderr
+    if "VIRTUAL_ENV" in os.environ:
+        HOME_DIR = Path(os.environ["VIRTUAL_ENV"])
+    else:
+        HOME_DIR = Path.home()
+    SOLC_SELECT_DIR = HOME_DIR.joinpath(".solc-select")
+    ARTIFACTS_DIR = SOLC_SELECT_DIR.joinpath("artifacts")
+    artifact_file_dir = ARTIFACTS_DIR.joinpath(f"solc-{version}")
 
-    # indented_result = textwrap.indent(result, '  ')
-    # colored_result = colored(indented_result, 'cyan')
-    # print(colored_result)
+    artifacts = get_version_list()
+    url = f"https://binaries.soliditylang.org/{env.soliditylang_platform()}/"+artifacts.get(version)
+    Path.mkdir(artifact_file_dir, parents=True, exist_ok=True)
+    print(f"Installing solc '{version}'...")
+    #urllib.request.urlretrieve(url, artifact_file_dir.joinpath(f"solc-{version}"))
+
+    response = requests.get(url)
+    with open(artifact_file_dir.joinpath(f"solc-{version}"), "wb") as file:
+        file.write(response.content)
+
+    #verify_checksum(version)
+    # Path.chmod(artifact_file_dir.joinpath(f"solc-{version}"), 0o775)
+
+    file_path = artifact_file_dir.joinpath(f"solc-{version}")
+    os.chmod(file_path, 0o775)
+    print(f"Version '{version}' installed.")
+    return True

@@ -1,0 +1,12 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "/Users/sikk/project_dream/join/join/test/reentrancy.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity  ^0.8.16;\n\ncontract EtherStore {\n    mapping(address => uint) public balances;\n\n    function deposit() public payable {\n        balances[msg.sender] += msg.value;\n    }\n\n    function withdraw() public {\n        uint bal = balances[msg.sender];\n        require(bal > 0);\n\n        (bool sent, ) = msg.sender.call{value: bal}(\"\");\n        require(sent, \"Failed to send Ether\");\n\n        balances[msg.sender] = 0;\n        revert(\"revert\");\n    }\n\n    // Helper function to check the balance of this contract\n    function getBalance() public view returns (uint) {\n        return address(this).balance;\n    }\n}"
+    },
+    "/Users/sikk/project_dream/join/join/test/example_code/dos.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.17;\n\ncontract EtherUnits {\n    uint public oneWei = 1 wei;\n    // 1 wei is equal to 1\n    bool public isOneWei = 1 wei == 1;\n\n    uint public oneEther = 1 ether;\n    // 1 ether is equal to 10^18 wei\n    bool public isOneEther = 1 ether == 1e18;\n}\n"
+    }
+  },
+  "settings": { "outputSelection": { "*": { "*": ["*"] } } }
+}
