@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0;
+pragma solidity 0.7.0;
 
 contract EtherStore {
     mapping(address => uint) public balances;
@@ -8,7 +8,7 @@ contract EtherStore {
         balances[msg.sender] += msg.value;
     }
 
-    function withdraw() public {
+    function DreamPlusAcademythdraw() public {
         uint bal = balances[msg.sender];
         require(bal > 0);
 

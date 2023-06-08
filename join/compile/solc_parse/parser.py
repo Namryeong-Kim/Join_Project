@@ -1,10 +1,11 @@
 import join.compile.solc_parse.parser_function as ps
 import join.compile.solc_parse.parser_env as env
+from solc_select.solc_select import switch_global_version
 
-def parse():
+def parse(file_path):
     env.halt_incompatible_system()
-    version_list = ps.get_version_list()
-    solidity_file = ps.get_solidity_source()
+    version_list = list(ps.get_version_list().keys())
+    solidity_file = ps.get_solidity_source(file_path)
     sign, version = ps.parse_solidity_version(solidity_file)
     #print("[Input]", sign, version)
     check = ps.check_version(version_list, version)
@@ -22,20 +23,25 @@ def parse():
         version = version_list[index - 1]
         #print("[Output]", version)
         ps.install_solc(version)
+        switch_global_version(version, True)
     elif sign == '>':
         version = version_list[index + 1]
         #print("[Output]", version)
         ps.install_solc(version)
+        switch_global_version(version, True)
     elif (sign == '^' or sign == '~'):
         version = ps.get_highest_version(version_list, version)
         #print("[Output]", version)
         ps.install_solc(version)
+        switch_global_version(version, True)
     elif (sign == '=' or sign == '>=' or sign == '<=') or (not sign and version):
         #print("[Output]", version)
         ps.install_solc(version)
+        switch_global_version(version, True)
+        
     else:
         print("incorrect sign")
         return
 
 if __name__ == "__main__":
-    parser()
+    parse()
