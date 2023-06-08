@@ -1,17 +1,14 @@
 import sys
-import subprocess
 import re, os
 import json
 import requests
 import join.compile.solc_parse.parser_env as env
-from pyparsing import Regex, Combine, Literal, OneOrMore, Empty
 from pathlib import Path
-from solc_select.solc_select import verify_checksum, get_url
 
 
-def get_solidity_source():
-    with open(sys.argv[1], 'r') as f:
-    #with open(file_path, 'r') as f:
+def get_solidity_source(file_path):
+    #with open(sys.argv[1], 'r') as f:
+    with open(file_path, 'r') as f:
         source_code = f.read()
     return source_code
 
@@ -38,31 +35,18 @@ def find_matching_index(versions, version_list):
 
 
 def parse_solidity_version(source_code):
-    equal = Literal("=")
-    carrot = Literal("^")
-    tilde = Literal("~")
-    inequality = Literal("<=") | Literal(">=") | Literal("<") | Literal(">")
-    combined_inequality = Combine(inequality)
-
-    pragma_pattern = r".*pragma solidity.*"
-    pragma_lines = re.findall(pragma_pattern, source_code)
-    #print("[Input]:", pragma_lines[0])
-
-    version_condition = Regex(r"\d+\.\d+(\.\d+)?")
-    version_with_condition = (carrot | tilde | combined_inequality | equal) + version_condition
-    pragma = Literal("pragma") + Literal("solidity") + OneOrMore(version_with_condition)
-
-    sign = []
+    pattern = r".*pragma solidity.*"
+    pragma_lines = re.findall(pattern, source_code)
     version = []
-    parsed_results = pragma.parseString(pragma_lines[0])
-    try:
-        for i, result in enumerate(parsed_results[2:]):
-            if i % 2 == 0:
-                sign.append(result)
-            else:
-                version.append(result)
-    except:
-        pass
+    sign = []
+    for pragma_match in pragma_lines:
+        condition_pattern = r"(\^|=|~|>=|<=|>|<)?\s*([0-9]+\.[0-9]+(\.[0-9]+)?)"
+        condition_matches = re.findall(condition_pattern, pragma_match)
+        for condition_match in condition_matches:
+            sign.append(condition_match[0].strip()
+                        if condition_match[0] else "")
+            version.append(condition_match[1].strip())
+    print(sign, version)
     return sign, version
 
 

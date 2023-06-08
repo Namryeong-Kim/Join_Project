@@ -2,10 +2,10 @@ import join.compile.solc_parse.parser_function as ps
 import join.compile.solc_parse.parser_env as env
 from solc_select.solc_select import switch_global_version
 
-def parse():
+def parse(file_path):
     env.halt_incompatible_system()
     version_list = list(ps.get_version_list().keys())
-    solidity_file = ps.get_solidity_source()
+    solidity_file = ps.get_solidity_source(file_path)
     sign, version = ps.parse_solidity_version(solidity_file)
     #print("[Input]", sign, version)
     check = ps.check_version(version_list, version)
