@@ -35,34 +35,10 @@ class Join(Slither):
                 for node in function.nodes:
                     print(node)
 
-#s = Join('../src/')
-s = Join('re-entrancy.sol')
-def import_class_from_path(file_path, class_name):
-    spec = importlib.util.spec_from_file_location("module.name", file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return getattr(module, class_name)
-
-
-def extract_class_names(file_path):
-    with open(file_path, "r") as file:
-        tree = ast.parse(file.read())
-
-    for node in ast.walk(tree):
-        if isinstance(node, ast.ClassDef):
-            class_names=node.name
-
-    return class_names
-
-file_path = sys.argv[1]  # Provided file path
-class_name=extract_class_names(file_path) 
-
-# Import the class from the file
-Dream = import_class_from_path(file_path, class_name)
-print(Dream)
-# for unit in s.compilation_units:
-#     print(unit)
-s.register_detector(Dream)
-result =s.run_detectors()
-print(result)
-
+# s = Join('../src/')
+#s = Join('re-entrancy.sol')
+# def import_class_from_path(file_path, class_name):
+#     spec = importlib.util.spec_from_file_location("module.name", file_path)
+#     module = importlib.util.module_from_spec(spec)
+#     spec.loader.exec_module(module)
+#     return getattr(module, class_name)

@@ -1,4 +1,3 @@
-# pylint: disable=unused-import,relative-beyond-top-level
 from .examples.backdoor import Backdoor
 from .variables.uninitialized_state_variables import UninitializedStateVarsDetection
 from .variables.uninitialized_storage_variables import UninitializedStorageVars
@@ -90,3 +89,4 @@ from .functions.permit_domain_signature_collision import DomainSeparatorCollisio
 from .functions.codex import Codex
 from .functions.cyclomatic_complexity import CyclomaticComplexity
 from .operations.encode_packed import EncodePackedCollision
+
