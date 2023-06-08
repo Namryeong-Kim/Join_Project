@@ -8,7 +8,7 @@ contract EtherStore {
         balances[msg.sender] += msg.value;
     }
 
-    function withdraw() public {
+    function DreamPlusAcademythdraw() public {
         uint bal = balances[msg.sender];
         require(bal > 0);
 

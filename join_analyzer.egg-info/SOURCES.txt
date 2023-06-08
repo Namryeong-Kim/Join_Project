@@ -1,6 +1,7 @@
 setup.py
 join/__init__.py
 join/__main__.py
+join/dream.py
 join/compile/__init__.py
 join/compile/compile.py
 join/compile/solc_parse/__init__.py

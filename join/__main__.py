@@ -4,7 +4,7 @@ from join.compile.solc_parse.parser import parse as solc_parse
 from join.compile.compile import Compile
 from slither.slither import Slither
 import sys
-from join.dream import Dream
+from join.compile.dream import Dream
 
 
 def main():
