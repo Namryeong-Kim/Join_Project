@@ -2,6 +2,7 @@ import os
 import ast
 import slither.detectors.all_detectors as all_detectors
 import re
+#from join.similarity.pysimilarity import PySimilarity
 
 class RuleSet():
     detector_list=[]
@@ -11,6 +12,7 @@ class RuleSet():
             self.file_name = os.path.basename(target)
             self.class_name = self.extract_class_names()
             self.source = self.get_source_code()
+            #super().__init__(target)
         self.detector_list = self.get_all_detectors()
         self.detector_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../slither/slither/detectors/"))
 
