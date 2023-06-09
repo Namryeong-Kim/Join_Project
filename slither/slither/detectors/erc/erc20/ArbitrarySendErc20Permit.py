@@ -5,7 +5,7 @@ from slither.detectors.abstract_detector import (
     DETECTOR_INFO,
 )
 from slither.utils.output import Output
-from .arbitrary_send_erc20 import ArbitrarySendErc20
+from .ArbitrarySendErc20 import ArbitrarySendErc20
 
 
 class ArbitrarySendErc20Permit(AbstractDetector):

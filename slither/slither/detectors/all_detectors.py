@@ -7,59 +7,59 @@ from .attributes.ConstFunctionsAsm import ConstantFunctionsAsm
 from .attributes.ConstFunctionsState import ConstantFunctionsState
 from .attributes.UnimplementedInterface import MissingInheritance
 
-from .compiler_bugs.storage_signed_integer_array import StorageSignedIntegerArray
-from .compiler_bugs.uninitialized_function_ptr_in_constructor import UninitializedFunctionPtrsConstructor
-from .compiler_bugs.storage_ABIEncoderV2_array import ABIEncoderV2Array
+from .compiler_bugs.StorageSignedIntegerArray import StorageSignedIntegerArray
+from .compiler_bugs.UninitializedFunctionPtrsConstructor import UninitializedFunctionPtrsConstructor
+from .compiler_bugs.ABIEncoderV2Array import ABIEncoderV2Array
 from .compiler_bugs.ArrayByReference import ArrayByReference
 from .compiler_bugs.EnumConversion import EnumConversion
 from .compiler_bugs.MultipleConstructorSchemes import MultipleConstructorSchemes
 from .compiler_bugs.PublicMappingNested import PublicMappingNested
 from .compiler_bugs.ReusedBaseConstructor import ReusedBaseConstructor
 
-from .erc.erc20.incorrect_erc20_interface import IncorrectERC20InterfaceDetection
-from .erc.erc20.arbitrary_send_erc20_no_permit import ArbitrarySendErc20NoPermit
-from .erc.erc20.arbitrary_send_erc20_permit import ArbitrarySendErc20Permit
-from .erc.erc20.arbitrary_send_erc20 import ArbitrarySendErc20
-from .erc.erc721.incorrect_erc721_interface import IncorrectERC721InterfaceDetection
-from .erc.erc20.unindexed_event_parameters import UnindexedERC20EventParameters
+from .erc.erc20.IncorrectERC20InterfaceDetection import IncorrectERC20InterfaceDetection
+from .erc.erc20.ArbitrarySendErc20NoPermit import ArbitrarySendErc20NoPermit
+from .erc.erc20.ArbitrarySendErc20Permit import ArbitrarySendErc20Permit
+from .erc.erc20.ArbitrarySendErc20 import ArbitrarySendErc20
+from .erc.erc721.IncorrectERC721InterfaceDetection import IncorrectERC721InterfaceDetection
+from .erc.erc20.UnindexedERC20EventParameters import UnindexedERC20EventParameters
 
 from .functions.arbitrary_send_eth import ArbitrarySendEth
 from .functions.suicidal import Suicidal
-from .functions.external_function import ExternalFunction
-from .functions.unimplemented import UnimplementedFunctionDetection
-from .functions.protected_variable import ProtectedVariables
-from .functions.permit_domain_signature_collision import DomainSeparatorCollision
+from .functions.ExternalFunction import ExternalFunction
+from .functions.UnimplementedFunctionDetection import UnimplementedFunctionDetection
+from .functions.ProtectedVariables import ProtectedVariables
+from .functions.DomainSeparatorCollision import DomainSeparatorCollision
 from .functions.codex import Codex
-from .functions.cyclomatic_complexity import CyclomaticComplexity
-from .functions.modifier import ModifierDefaultDetection
-from .functions.dead_code import DeadCode
+from .functions.CyclomaticComplexity import CyclomaticComplexity
+from .functions.ModifierDefaultDetection import ModifierDefaultDetection
+from .functions.DeadCode import DeadCode
 
 from .naming_convention.naming_convention import NamingConvention
 
 from .operations.low_level_calls import LowLevelCalls
-from .operations.unused_return_values import UnusedReturnValues
-from .operations.unchecked_transfer import UncheckedTransfer
-from .operations.unchecked_low_level_return_values import UncheckedLowLevel
+from .operations.UnusedReturnValues import UnusedReturnValues
+from .operations.UncheckedTransfer import UncheckedTransfer
+from .operations.UncheckedLowLevel import UncheckedLowLevel
 from .operations.unchecked_send_return_value import UncheckedSend
-from .operations.void_constructor import VoidConstructor
+from .operations.VoidConstructor import VoidConstructor
 from .operations.block_timestamp import Timestamp
-from .operations.bad_prng import BadPRNG
-from .operations.encode_packed import EncodePackedCollision
+from .operations.BadPRNG import BadPRNG
+from .operations.EncodePackedCollision import EncodePackedCollision
 from .operations.missing_events_access_control import MissingEventsAccessControl
-from .operations.missing_events_arithmetic import MissingEventsArithmetic
-from .operations.missing_zero_address_validation import MissingZeroAddressValidation
+from .operations.MissingEventsArithmetic import MissingEventsArithmetic
+from .operations.MissingZeroAddressValidation import MissingZeroAddressValidation
 
-from .reentrancy.reentrancy_benign import ReentrancyBenign
-from .reentrancy.reentrancy_read_before_write import ReentrancyReadBeforeWritten
-from .reentrancy.reentrancy_eth import ReentrancyEth
-from .reentrancy.reentrancy_no_gas import ReentrancyNoGas
-from .reentrancy.reentrancy_events import ReentrancyEvent
-from .reentrancy.token import TokenReentrancy
+from .reentrancy.ReentrancyBenign import ReentrancyBenign
+from .reentrancy.ReentrancyReadBeforeWritten import ReentrancyReadBeforeWritten
+from .reentrancy.ReentrancyEth import ReentrancyEth
+from .reentrancy.ReentrancyNoGas import ReentrancyNoGas
+from .reentrancy.ReentrancyEvent import ReentrancyEvent
+from .reentrancy.TokenReentrancy import TokenReentrancy
 
-from .shadowing.abstract import ShadowingAbstractDetection
-from .shadowing.state import StateShadowing
-from .shadowing.local import LocalShadowing
-from .shadowing.builtin_symbols import BuiltinSymbolShadowing
+from .shadowing.ShadowingAbstractDetection import ShadowingAbstractDetection
+from .shadowing.StateShadowing import StateShadowing
+from .shadowing.LocalShadowing import LocalShadowing
+from .shadowing.BuiltinSymbolShadowing import BuiltinSymbolShadowing
 
 from .slither.name_reused import NameReused
 

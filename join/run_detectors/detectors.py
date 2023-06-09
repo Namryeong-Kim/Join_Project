@@ -17,7 +17,7 @@ class RunDetector(Slither):
     def get_all_detectors(self):
         detector_list = [key for key in all_detectors.__dict__.keys() if not key.startswith('__')]
         import_list = [value for value in all_detectors.__dict__.values()]
-
+        <class 'slither.detectors.dddd'>
         self.available_detector_list=detector_list
         category_list = ['Reentrancy','Attributes','CompilerBugs', 'CustomizedRules', 'ERC20','ERC721', 'Functions', 'Operations', 'Shadowing', 'Statements', 'Variables']
         for category in category_list:
