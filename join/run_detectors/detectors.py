@@ -78,16 +78,26 @@ class RunDetector(Slither):
                     print(f"{detector} is not available")
 
             else:
+                detector_path=""
+                with open(all_detectors.__file__, "r") as file:
+                    content = file.read()
+                import_pattern = rf".*import {re.escape(target)}"
+                import_line = re.findall(import_pattern, content)
+                import_line = ''.join(import_line)
+
+                file_name_pattern = rf"from \.customized_rules\.(\w+) import {target}"
+                match = re.search(file_name_pattern, import_line)
+                if match:
+                    result = match.group(1)
+
+                content = content.split("\n")
                 if detector in RunDetector.available_detector_list:
+
                     print("detect list", RunDetector.available_detector_list)
                     print("import list", self.import_list)
-                    if 
-                    filtered_list = self.import_list if '.customized_rules.' in item]
-                    self.register_detector(filtered_list[0])
-                
-
-
-
+                    if '.customized_rules.' in self.import_list:
+                        self.register_detector(self.import_list[0])
+        print(self._detectors)
 
 d = RunDetector('../compile/re-entrancy.sol',['Reentrancy','Dream'])
 d.register_detectors()
