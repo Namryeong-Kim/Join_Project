@@ -211,7 +211,7 @@ class Slither(SlitherCore):  # pylint: disable=too-many-instance-attributes
         """
         :param printer_class: Class inheriting from `AbstractPrinter`.
         """
-
+        
         for obj in self._printers:
             if isinstance(obj, printer_class):
                 self._printers.remove(obj)
