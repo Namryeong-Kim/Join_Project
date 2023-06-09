@@ -33,7 +33,7 @@ class RuleSet():
         return source
 
     def register_detector(self) -> None:
-        detector_path = os.path.join(self.detector_path, "customized_rule/"+self.file_name)
+        detector_path = os.path.join(self.detector_path, "customized_rules/"+self.file_name)
         if os.path.exists(detector_path):
             print(f"File '{detector_path}' already exists.")
             return
@@ -47,7 +47,7 @@ class RuleSet():
     def _add_all_detectors(self) -> None:
         with open(all_detectors.__file__, "r") as file:
             content = file.readlines()
-        add_line = f"from .customized_rule.{self.file_name[:-3]} import {self.class_name}\n"
+        add_line = f"from .customized_rules.{self.file_name[:-3]} import {self.class_name}\n"
         if add_line in content:
             print(f"{self.class_name} is already in all_detectors.py")
 
@@ -67,8 +67,6 @@ class RuleSet():
             print(f"File '{detector_path}' does not exist.")
 
 
-
-
     def _remove_all_detectors(self, target) -> None:
         detector_path=""
         with open(all_detectors.__file__, "r") as file:
@@ -77,18 +75,17 @@ class RuleSet():
         import_line = re.findall(import_pattern, content)
         import_line = ''.join(import_line)
 
-        file_name_pattern = rf"from \.customized_rule\.(\w+) import {target}"
+        file_name_pattern = rf"from \.customized_rules\.(\w+) import {target}"
         match = re.search(file_name_pattern, import_line)
         if match:
             result = match.group(1)
 
         content = content.split("\n")
-        print(content)
 
         if import_line in content:
             content.remove(import_line)
             content.pop(0)
-            detector_path = os.path.join(self.detector_path, "customized_rule/", result+".py")
+            detector_path = os.path.join(self.detector_path, "customized_rules/", result+".py")
             with open(all_detectors.__file__, "w") as file:
                 file.write('\n'.join(content))
             print(f"{target} is removed from all_detectors.py")
@@ -100,12 +97,14 @@ class RuleSet():
 rule=RuleSet("../compile/dream.py")
 print(rule.detector_list)   
 rule.register_detector()
+print(rule.detector_list)
 
 
-rule2=RuleSet("Dream")
-print(rule2.detector_list)
-rule2.unregister_detector("Dream")
-print(rule2.detector_list)
+
+# rule2=RuleSet("Dream")
+# print(rule2.detector_list)
+# rule2.unregister_detector("Dream")
+# print(rule2.detector_list)
 
 
 

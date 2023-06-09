@@ -8,12 +8,12 @@ from slither.detectors.abstract_detector import (
 from slither.utils.output import Output
 
 
-class Backdoor(AbstractDetector):
+class Dream(AbstractDetector):
     """
     Detect function named backdoor
     """
 
-    ARGUMENT = "backdoor"  # slither will launch the detector with slither.py --mydetector
+    ARGUMENT = "dream"  #slither option
     HELP = "Function named backdoor (detector example)"
     IMPACT = DetectorClassification.HIGH
     CONFIDENCE = DetectorClassification.HIGH
@@ -30,9 +30,9 @@ class Backdoor(AbstractDetector):
         for contract in self.compilation_unit.contracts_derived:
             # Check if a function has 'backdoor' in its name
             for f in contract.functions:
-                if "backdoor" in f.name:
+                if "DreamPlusAcademy" in f.name: #function name이 일치하면 bug로 판단하도록
                     # Info to be printed
-                    info: DETECTOR_INFO = ["Backdoor function found in ", f, "\n"]
+                    info: DETECTOR_INFO = ["DreamPlusAcademy function found in ", f, "\n"]
 
                     # Add the result in result
                     res = self.generate_result(info)
