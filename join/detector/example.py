@@ -1,10 +1,10 @@
 import argparse
-import subprocess
-import time
-from tabulate import tabulate
-from similar import Similar
 from compile import Compile
+import time
+from colored import fg, attr
+from tabulate import tabulate
 from slither.slither import Slither
+import subprocess
 
 
 class Detector:
@@ -14,6 +14,7 @@ class Detector:
         self.parser.add_argument('detect', help='Select mode: print or detect')
         self.parser.add_argument('detection_type', choices=['vuln', 'logic'], help='Select detection type: vuln or logic')
         self.parser.add_argument('--detector', help='Select a Detector')
+    
 
     def main(self):
         args = self.parser.parse_args()
@@ -26,20 +27,22 @@ class Detector:
                         if function.expressions:
                             slither.append({"function": function.name})
 
+
         if args.detection_type == 'vuln':
             res = self._detect_vulnerability(args.target_file, args.detector)
         elif args.detection_type == 'logic':
             if args.detector == "Uniswap":
-                res = self._detect_logic(args.target_file, args.detector, slither)
-                result = self._detect_logic_with_similar(args.target_file, args.detector, res)
+                res = self._check_similar(args.target_file, args.detector, contract, slither)
+                result = self._detect_logic(args.target_file, args.detector, res)
                 print(result)
             elif args.detector == "Balancer":
                 print("Balancer does not have a detector yet")
             else:
-                print("Error: This is not supported.")
+                print("Error : This is not supported.")
         else:
-            print("Error: This is not supported.")
-
+            print("Error : This is not supported.")
+    
+    
     def _detect_vulnerability(self, file, detector):
         cmd = f'slither {file}'
         if detector is not None:
@@ -49,6 +52,7 @@ class Detector:
 
         return result
 
+    
     def _detect_logic(self, file, detector, res):
         table_data = []
         for function in res:
@@ -64,22 +68,7 @@ class Detector:
         
         return tabulate(table_data, headers=headers, tablefmt="fancy_grid")
 
-    def _detect_logic_with_similar(self, file, detector, res):
-        table_data = []
-        similar = Similar()  # Create an instance of the Similar class
-        for function in res:
-            target_contract = function['target_contract']
-            target_function = function['target_function']
-            detect_contract = function['detect_contract']
-            detect_function = function['detect_function']
-
-            # Call the test method of the Similar class
-            arg = {'path': file, 'contract': target_contract, 'function': target_function, 'detector': detector}
-            similar.test(arg)
-
-            # Process the results as desired
-            # ...
-
+              
     @staticmethod
     def _check_similar(path, detector, contract, funcs):
         detect = []
@@ -99,14 +88,12 @@ class Detector:
 
     @staticmethod
     def _execute_slither(cmd):
-        try:
-            output = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=60)
-            return output.returncode == 0
-        except subprocess.TimeoutExpired:
-            print("Error: Slither execution timed out.")
-            return False
+        execute = str(subprocess.run(cmd, shell=True, capture_output=True, text=True).stderr).split('\n')
+        return bool(execute)
 
 
-if __name__ == "__main__":
-    detector = Detector()
-    detector.main()
+start = time.time()
+detector = Detector()
+detector.main()
+end = time.time()
+print(f"running time: {end - start:.5f} sec")
