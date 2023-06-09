@@ -7,7 +7,8 @@ class PySimilarity():
     def __init__(self, new_detector:str):
         self.new_detector = new_detector
         self.detectors_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../slither/slither/detectors/"))
-        self.new_detector_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), new_detector))
+        self.new_detector_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../slither/slither/detectors/customized_rules",new_detector))
+        self.new_detector_content = self.read_file()
 
     def get_files_in_directory(self):
         file_list = []
@@ -22,23 +23,22 @@ class PySimilarity():
                 file_list.append(file_path)
         return file_list
 
-
-
-
     def read_file(self):
         with open(self.new_detector_path, "r") as file:
             return file.read()
 
-    def get_ast(filename):
-        source_code = read_file(filename)
-        return ast.parse(source_code)
+    def get_ast(target):
+        return ast.parse(target)
 
-    def compare_files(file1, file2):
-        ast1 = get_ast(file1)
-        ast2 = get_ast(file2)
+    def compare_files(self):
+        new_detector_ast = self.get_ast(self.new_detector_content)
 
-        diff = difflib.SequenceMatcher(None, ast.dump(ast1), ast.dump(ast2))
-        similarity_ratio = diff.ratio()
+        for origin_detector in self.get_files_in_directory():
+            origin_detector_ast = self.get_ast(origin_detector)
+
+            diff = difflib.SequenceMatcher(None, ast.dump(new_detector_ast), ast.dump(origin_detector_ast))
+            similarity_ratio = diff.ratio()
+            print(f"Similarity between {self.new_detector} and {origin_detector}: {similarity_ratio}")
 
         return similarity_ratio
 
@@ -67,9 +67,7 @@ class PySimilarity():
 #         similarity = similarity_matrix[file1][file2]
 #         print(f"Similarity between {file1} and {file2}: {similarity}")
 
-file_ = PySimilarity("dream")
+file_ = PySimilarity("dream.py")
 file_list =file_.get_files_in_directory()
-
-# 출력해보기
-for file in file_list:
-    print(file)
+#print(file_.new_detector_content)
+print(file_.get_ast(file_.new_detector_content)[0])
