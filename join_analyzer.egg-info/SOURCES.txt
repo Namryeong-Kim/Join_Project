@@ -9,7 +9,6 @@ join/compile/solc_parse/parser.py
 join/compile/solc_parse/parser_env.py
 join/compile/solc_parse/parser_function.py
 join/rule_set/__init__.py
-join/rule_set/dream.py
 join/rule_set/rule.py
 join/src/__init__.py
 join_analyzer.egg-info/PKG-INFO

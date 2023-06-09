@@ -5,7 +5,6 @@ setup(
     name='join-analyzer',
     version='0.1.0',
     packages=find_packages(),
-    python_requires=">=3.8",
     # install_requires=[
     #     'argparse==1.4.0',
     #     'solc-select==0.2.0',

@@ -1,3 +1,2 @@
 [console_scripts]
 join = join.__main__:main
-
