@@ -9,7 +9,7 @@ from typing import DefaultDict, List, Union, Set
 
 from slither.core.variables.variable import Variable
 from slither.detectors.abstract_detector import DetectorClassification
-from slither.detectors.reentrancy.reentrancy import Reentrancy, to_hashable
+from slither.detectors.reentrancy.Reentrancy import Reentrancy, to_hashable
 from slither.slithir.operations import Send, Transfer, EventCall
 from slither.slithir.operations.high_level_call import HighLevelCall
 from slither.slithir.operations.member import Member

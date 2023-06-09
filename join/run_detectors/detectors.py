@@ -36,16 +36,21 @@ class RunDetector(Slither):
                     self.register_detector(item)
             else:
                 print(f"Error: {detector} is not available.")
+        print(self.available_detector_list)
+        print(self._detectors)
 
     def run_detectors(self):
+        description=""
         results = super().run_detectors()
-
+        print(self._detectors)
         for detector_result in results:
             for result in detector_result:
-                print(result['description'])
-            
+                description =result['description']
+        print(description)
+        return description
+    
 
-d = RunDetector('../compile/re-entrancy.sol',['Reentrancy', 'Dream', 'ExternalFunction'])
-d.register_detectors()
-# print(d._detectors)
-d.run_detectors()
+# d = RunDetector('../compile/re-entrancy.sol',['Reentrancy', 'Dream', 'ExternalFunction'])
+# d.register_detectors()
+# # print(d._detectors)
+# print(d.run_detectors())

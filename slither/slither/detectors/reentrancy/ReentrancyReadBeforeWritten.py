@@ -8,7 +8,7 @@ from collections import namedtuple, defaultdict
 from typing import Dict, Set, List
 
 from slither.detectors.abstract_detector import DetectorClassification
-from .reentrancy import Reentrancy, to_hashable
+from .Reentrancy import Reentrancy, to_hashable
 from ...utils.output import Output
 
 FindingKey = namedtuple("FindingKey", ["function", "calls"])

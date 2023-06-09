@@ -1,12 +1,10 @@
 from .assembly.ShiftParameterMixup import ShiftParameterMixup
-
 from .attributes.ConstantPragma import ConstantPragma
 from .attributes.IncorrectSolc import IncorrectSolc
 from .attributes.LockedEther import LockedEther
 from .attributes.ConstFunctionsAsm import ConstantFunctionsAsm
 from .attributes.ConstFunctionsState import ConstantFunctionsState
 from .attributes.MissingInheritance import MissingInheritance
-
 from .compiler_bugs.StorageSignedIntegerArray import StorageSignedIntegerArray
 from .compiler_bugs.UninitializedFunctionPtrsConstructor import UninitializedFunctionPtrsConstructor
 from .compiler_bugs.ABIEncoderV2Array import ABIEncoderV2Array
@@ -15,16 +13,14 @@ from .compiler_bugs.EnumConversion import EnumConversion
 from .compiler_bugs.MultipleConstructorSchemes import MultipleConstructorSchemes
 from .compiler_bugs.PublicMappingNested import PublicMappingNested
 from .compiler_bugs.ReusedBaseConstructor import ReusedBaseConstructor
-
 from .erc.erc20.IncorrectERC20InterfaceDetection import IncorrectERC20InterfaceDetection
 from .erc.erc20.ArbitrarySendErc20NoPermit import ArbitrarySendErc20NoPermit
 from .erc.erc20.ArbitrarySendErc20Permit import ArbitrarySendErc20Permit
 from .erc.erc20.ArbitrarySendErc20 import ArbitrarySendErc20
 from .erc.erc721.IncorrectERC721InterfaceDetection import IncorrectERC721InterfaceDetection
 from .erc.erc20.UnindexedERC20EventParameters import UnindexedERC20EventParameters
-
 from .functions.ArbitrarySendEth import ArbitrarySendEth
-from .functions.suicidal import Suicidal
+from .functions.Suicidal import Suicidal
 from .functions.ExternalFunction import ExternalFunction
 from .functions.UnimplementedFunctionDetection import UnimplementedFunctionDetection
 from .functions.ProtectedVariables import ProtectedVariables
@@ -33,9 +29,7 @@ from .functions.codex import Codex
 from .functions.CyclomaticComplexity import CyclomaticComplexity
 from .functions.ModifierDefaultDetection import ModifierDefaultDetection
 from .functions.DeadCode import DeadCode
-
 from .naming_convention.NamingConvention import NamingConvention
-
 from .operations.LowLevelCalls import LowLevelCalls
 from .operations.UnusedReturnValues import UnusedReturnValues
 from .operations.UncheckedTransfer import UncheckedTransfer
@@ -48,55 +42,48 @@ from .operations.EncodePackedCollision import EncodePackedCollision
 from .operations.MissingEventsAccessControl import MissingEventsAccessControl
 from .operations.MissingEventsArithmetic import MissingEventsArithmetic
 from .operations.MissingZeroAddressValidation import MissingZeroAddressValidation
-
 from .reentrancy.ReentrancyBenign import ReentrancyBenign
 from .reentrancy.ReentrancyReadBeforeWritten import ReentrancyReadBeforeWritten
 from .reentrancy.ReentrancyEth import ReentrancyEth
 from .reentrancy.ReentrancyNoGas import ReentrancyNoGas
 from .reentrancy.ReentrancyEvent import ReentrancyEvent
 from .reentrancy.TokenReentrancy import TokenReentrancy
-
 from .shadowing.ShadowingAbstractDetection import ShadowingAbstractDetection
 from .shadowing.StateShadowing import StateShadowing
 from .shadowing.LocalShadowing import LocalShadowing
 from .shadowing.BuiltinSymbolShadowing import BuiltinSymbolShadowing
-
-from .slither.name_reused import NameReused
-
-from .source.rtlo import RightToLeftOverride
-
-from .statements.tx_origin import TxOrigin
-from .statements.assembly import Assembly
-from .statements.controlled_delegatecall import ControlledDelegateCall
-from .statements.calls_in_loop import MultipleCallsInLoop
-from .statements.incorrect_strict_equality import IncorrectStrictEquality
-from .statements.deprecated_calls import DeprecatedStandards
-from .statements.too_many_digits import TooManyDigits
-from .statements.type_based_tautology import TypeBasedTautology
-from .statements.boolean_constant_equality import BooleanEquality
-from .statements.boolean_constant_misuse import BooleanConstantMisuse
-from .statements.divide_before_multiply import DivideBeforeMultiply
-from .statements.unprotected_upgradeable import UnprotectedUpgradeable
-from .statements.mapping_deletion import MappingDeletionDetection
-from .statements.array_length_assignment import ArrayLengthAssignment
-from .statements.redundant_statements import RedundantStatements
-from .statements.costly_operations_in_loop import CostlyOperationsInLoop
-from .statements.assert_state_change import AssertStateChange
-from .statements.unary import IncorrectUnaryExpressionDetection
-from .statements.write_after_write import WriteAfterWrite
-from .statements.msg_value_in_loop import MsgValueInLoop
-from .statements.delegatecall_in_loop import DelegatecallInLoop
-
-from .variables.uninitialized_state_variables import UninitializedStateVarsDetection
-from .variables.uninitialized_storage_variables import UninitializedStorageVars
-from .variables.uninitialized_local_variables import UninitializedLocalVars
-from .variables.var_read_using_this import VarReadUsingThis
-from .variables.unused_state_variables import UnusedStateVars
-from .variables.could_be_constant import CouldBeConstant
-from .variables.could_be_immutable import CouldBeImmutable
-from .variables.similar_variables import SimilarVarsDetection
-from .variables.function_init_state_variables import FunctionInitializedState
-from .variables.predeclaration_usage_local import PredeclarationUsageLocal
-from .variables.unchanged_state_variables import UnchangedStateVariables
-
-from .customized_rules.dream import Dream
+from .slither.NameReused import NameReused
+from .source.RightToLeftOverride import RightToLeftOverride
+from .statements.TxOrigin import TxOrigin
+from .statements.Assembly import Assembly
+from .statements.ControlledDelegateCall import ControlledDelegateCall
+from .statements.MultipleCallsInLoop import MultipleCallsInLoop
+from .statements.IncorrectStrictEquality import IncorrectStrictEquality
+from .statements.DeprecatedStandards import DeprecatedStandards
+from .statements.TooManyDigits import TooManyDigits
+from .statements.TypeBasedTautology import TypeBasedTautology
+from .statements.BooleanEquality import BooleanEquality
+from .statements.BooleanConstantMisuse import BooleanConstantMisuse
+from .statements.DivideBeforeMultiply import DivideBeforeMultiply
+from .statements.UnprotectedUpgradeable import UnprotectedUpgradeable
+from .statements.MappingDeletionDetection import MappingDeletionDetection
+from .statements.ArrayLengthAssignment import ArrayLengthAssignment
+from .statements.RedundantStatements import RedundantStatements
+from .statements.CostlyOperationsInLoop import CostlyOperationsInLoop
+from .statements.AssertStateChange import AssertStateChange
+from .statements.InvalidUnaryExpressionDetector import IncorrectUnaryExpressionDetection
+from .statements.WriteAfterWrite import WriteAfterWrite
+from .statements.MsgValueInLoop import MsgValueInLoop
+from .statements.DelegatecallInLoop import DelegatecallInLoop
+from .variables.UninitializedStateVarsDetection import UninitializedStateVarsDetection
+from .variables.UninitializedStorageVars import UninitializedStorageVars
+from .variables.UninitializedLocalVars import UninitializedLocalVars
+from .variables.VarReadUsingThis import VarReadUsingThis
+from .variables.UnusedStateVars import UnusedStateVars
+from .variables.CouldBeConstant import CouldBeConstant
+from .variables.CouldBeImmutable import CouldBeImmutable
+from .variables.SimilarVarsDetection import SimilarVarsDetection
+from .variables.FunctionInitializedState import FunctionInitializedState
+from .variables.PredeclarationUsageLocal import PredeclarationUsageLocal
+from .variables.UnchangedStateVariables import UnchangedStateVariables
+from .customized_rules.SuicidalModule import SuicidalModule
