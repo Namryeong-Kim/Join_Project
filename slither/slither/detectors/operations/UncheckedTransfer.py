@@ -4,7 +4,7 @@ Module detecting unused transfer/transferFrom return values from external calls
 
 from slither.core.declarations import Function
 from slither.detectors.abstract_detector import DetectorClassification
-from slither.detectors.operations.unused_return_values import UnusedReturnValues
+from slither.detectors.operations.UnusedReturnValues import UnusedReturnValues
 from slither.slithir.operations import HighLevelCall
 from slither.slithir.operations.operation import Operation
 

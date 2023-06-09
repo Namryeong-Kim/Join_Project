@@ -2,7 +2,7 @@
 Module detecting unused return values from low level
 """
 from slither.detectors.abstract_detector import DetectorClassification
-from slither.detectors.operations.unused_return_values import UnusedReturnValues
+from slither.detectors.operations.UnusedReturnValues import UnusedReturnValues
 from slither.slithir.operations import LowLevelCall
 from slither.slithir.operations.operation import Operation
 

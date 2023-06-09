@@ -5,7 +5,7 @@ from .attributes.IncorrectSolc import IncorrectSolc
 from .attributes.LockedEther import LockedEther
 from .attributes.ConstFunctionsAsm import ConstantFunctionsAsm
 from .attributes.ConstFunctionsState import ConstantFunctionsState
-from .attributes.UnimplementedInterface import MissingInheritance
+from .attributes.MissingInheritance import MissingInheritance
 
 from .compiler_bugs.StorageSignedIntegerArray import StorageSignedIntegerArray
 from .compiler_bugs.UninitializedFunctionPtrsConstructor import UninitializedFunctionPtrsConstructor
@@ -23,7 +23,7 @@ from .erc.erc20.ArbitrarySendErc20 import ArbitrarySendErc20
 from .erc.erc721.IncorrectERC721InterfaceDetection import IncorrectERC721InterfaceDetection
 from .erc.erc20.UnindexedERC20EventParameters import UnindexedERC20EventParameters
 
-from .functions.arbitrary_send_eth import ArbitrarySendEth
+from .functions.ArbitrarySendEth import ArbitrarySendEth
 from .functions.suicidal import Suicidal
 from .functions.ExternalFunction import ExternalFunction
 from .functions.UnimplementedFunctionDetection import UnimplementedFunctionDetection
@@ -34,18 +34,18 @@ from .functions.CyclomaticComplexity import CyclomaticComplexity
 from .functions.ModifierDefaultDetection import ModifierDefaultDetection
 from .functions.DeadCode import DeadCode
 
-from .naming_convention.naming_convention import NamingConvention
+from .naming_convention.NamingConvention import NamingConvention
 
-from .operations.low_level_calls import LowLevelCalls
+from .operations.LowLevelCalls import LowLevelCalls
 from .operations.UnusedReturnValues import UnusedReturnValues
 from .operations.UncheckedTransfer import UncheckedTransfer
 from .operations.UncheckedLowLevel import UncheckedLowLevel
-from .operations.unchecked_send_return_value import UncheckedSend
+from .operations.UncheckedSend import UncheckedSend
 from .operations.VoidConstructor import VoidConstructor
-from .operations.block_timestamp import Timestamp
+from .operations.Timestamp import Timestamp
 from .operations.BadPRNG import BadPRNG
 from .operations.EncodePackedCollision import EncodePackedCollision
-from .operations.missing_events_access_control import MissingEventsAccessControl
+from .operations.MissingEventsAccessControl import MissingEventsAccessControl
 from .operations.MissingEventsArithmetic import MissingEventsArithmetic
 from .operations.MissingZeroAddressValidation import MissingZeroAddressValidation
 
