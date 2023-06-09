@@ -47,5 +47,5 @@ class RunDetector(Slither):
 
 d = RunDetector('../compile/re-entrancy.sol',['Reentrancy', 'Dream', 'ExternalFunction'])
 d.register_detectors()
-print(d._detectors)
+# print(d._detectors)
 d.run_detectors()
