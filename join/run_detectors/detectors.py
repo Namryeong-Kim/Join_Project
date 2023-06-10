@@ -24,32 +24,34 @@ class RunDetector(Slither):
         return self.available_detector_list, category_list, import_list
     
     def register_detectors(self):
-        for detector in self.selected_detectors:
-    
-            if detector in self.category:
-                category = detector.capitalize()
-                filtered_list = [item for item in self.import_list if f'{category}' in str(item)]
-                for item in filtered_list:
-                    self.register_detector(item)
-            elif detector in self.available_detector_list:
-                print(self.available_detector_list)
-                filtered_list = [item for item in self.import_list if f'{detector}' in str(item)]
-                for item in filtered_list:
-                    self.register_detector(item)
-            else:
-                print(f"Error: {detector} is not available.")
+        if not self.selected_detectors:
+            for item in self.import_list[8:]:
+                self.register_detector(item)
+        elif self.selected_detectors:
+            for detector in self.selected_detectors:
+                if detector in self.category:
+                    category = detector.capitalize()
+                    filtered_list = [item for item in self.import_list if f'{category}' in str(item)]
+                    for item in filtered_list:
+                        self.register_detector(item)
+                elif detector in self.available_detector_list:
+                    filtered_list = [item for item in self.import_list if f'{detector}' in str(item)]
+                    for item in filtered_list:
+                        self.register_detector(item)
+                else:
+                    print(f'{detector} is not available')
 
     def run_detectors(self):
         description=[]
-        print(self._detectors)
         results = super().run_detectors()
+        #print(results) #result 요소 중에 description만 뽑고 있는데, 필요한 정보 더 뽑을 수 있음
         for detector_result in results:
             for result in detector_result:
                 description.append(result['description'])
         return description
     
 
-# d = RunDetector('./re-entrancy.sol',['Reentrancy', 'ExternalFunction'])
-# d.register_detectors()
-# # print(d._detectors)
-# print(d.run_detectors())
+d = RunDetector('./re-entrancy.sol')
+d.register_detectors()
+# print(d._detectors)
+print(d.run_detectors())

@@ -99,7 +99,7 @@ class RuleSet():
 
     def print_compared_files(self):
         origin_detector, origin_detector_contents= self.py_similarity.compare_files()
-        example_path =os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), origin_detector+".sol"))
+        example_path =os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rule_compare_examples", origin_detector + ".sol"))
 
         origin_result =RunDetector(example_path,[origin_detector])
         origin_result.register_detectors()
