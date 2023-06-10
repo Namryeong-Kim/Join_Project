@@ -12,6 +12,6 @@ setup(
     #     'crytic-compile==0.1.0',
     # ],
     entry_points={
-        'console_scripts': ['join=join.__main__:main'],
+        'console_scripts': ['sikk=join.__main__:main'],
     },
 )
