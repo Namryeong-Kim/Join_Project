@@ -25,7 +25,7 @@ class RunDetector(Slither):
     
     def register_detectors(self):
         for detector in self.selected_detectors:
-            print(detector)
+    
             if detector in self.category:
                 category = detector.capitalize()
                 filtered_list = [item for item in self.import_list if f'{category}' in str(item)]

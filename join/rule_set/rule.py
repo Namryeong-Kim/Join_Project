@@ -2,20 +2,19 @@ import os
 import ast
 import slither.detectors.all_detectors as all_detectors
 import re
-from join.similarity.pysimilarity import PySimilarity
+from rule_set.pysimilarity import PySimilarity
 from join.run_detectors.detectors import RunDetector
 from tabulate import tabulate
 
-class RuleSet(PySimilarity):
+class RuleSet():
     detector_list=[]
     def __init__(self, target: str) -> None:
         if target.endswith(".py"):
             self.file_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), target))
             self.file_name = os.path.basename(target)
             self.class_name = self.extract_class_names()
-            self.source = self.get_source_code()
-
-            super().__init__(target)
+            self.source = self.get_source_code(self.file_path)
+            self.py_similarity = PySimilarity(self.file_name)
         self.detector_list = self.get_all_detectors()
         self.detector_path = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../slither/slither/detectors/"))
 
@@ -32,8 +31,8 @@ class RuleSet(PySimilarity):
         RuleSet.detector_list=detector_list
         return RuleSet.detector_list
     
-    def get_source_code(self):
-        with open(self.file_path, "r") as file:
+    def get_source_code(self, target):
+        with open(target, "r") as file:
             source = file.read()
         return source
 
@@ -56,7 +55,7 @@ class RuleSet(PySimilarity):
         if add_line in content:
             print(f"{self.class_name} is already in all_detectors.py")
 
-        content.append(f"from .customized_rule.{self.file_name[:-3]} import {self.class_name}\n")
+        content.append(f"from .customized_rules.{self.file_name[:-3]} import {self.class_name}\n")
 
         with open(all_detectors.__file__, "w") as file:
             file.writelines(content)
@@ -99,37 +98,35 @@ class RuleSet(PySimilarity):
         return detector_path
 
     def print_compared_files(self):
-        origin_detector= self.compare_files()
+        origin_detector, origin_detector_contents= self.py_similarity.compare_files()
         example_path =os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), origin_detector+".sol"))
-        print(origin_detector)
 
         origin_result =RunDetector(example_path,[origin_detector])
         origin_result.register_detectors()
-        print(origin_result._detectors)
-
         origin_detect_result=origin_result.run_detectors()
-        for result in origin_detect_result:
-            print(result)
 
-        new_result = RunDetector(self.example_path,[origin_detectors])
-        new_result.get_all_detectors()
+        new_result = RunDetector(example_path,[self.py_similarity.new_detector[:-3]])
         new_result.register_detectors()
-        result = [
-            ["",self.new_detector[:-3], origin_detectors],
-            ["Contents", self.new_detector_content, origin_detector_content],
-            ["Run Result", origin_result.run_detectors(), new_result.run_detectors()]
-        ]
-        table = tabulate(result, tablefmt="fancy_grid")
-        print(table)
-        # print(f"New Detector: {self.new_detector}")
-        # print(f"Similar Detector: {self.compare_files()}")
-        # print(f"New Detector Contents: {self.new_detector_content}")
-        # for self.compare_files() in self.get_files_in_directory():
+        new_detect_result=new_result.run_detectors()
 
-        # print(f"Similar Detector Contents: {self.read_file(self.compare_files())}")'
-        print(f"New Detector Result: ")
+        print("Origin Detector: ", origin_detector)
+        print("Origin Detector Contents: \n", origin_detector_contents)
+        print("Origin Detector Result: \n", origin_detect_result)
+        print("New Detector: ", self.py_similarity.new_detector[:-3])
+        print("New Detector Contents: \n", self.py_similarity.new_detector_content)
+        print("New Detector Result: \n", new_detect_result)
+        # result = [
+        #     ["",self.py_similarity.new_detector[:-3], origin_detector],
+        #     ["Contents", self.py_similarity.new_detector_content, origin_detector_contents],
+        #     ["Run Result", new_detect_result, origin_detect_result]
+        # ]
+        # table = tabulate(result, tablefmt="fancy_grid")
+        # print(table)
 
-rule=RuleSet("SuicidalModule.py")
+        #tabulate 사용시 셀이 깨져버리는 현상 발생 -> tabulate는 고정 값을 갖고 있어 내용이 길어지면 셀이 깨짐
+
+
+rule=RuleSet("reentrancy.py")
 #print(rule.detector_list)   
 #rule.register_detector()
 rule.print_compared_files()
@@ -140,15 +137,3 @@ rule.print_compared_files()
 # print(rule2.detector_list)
 # rule2.unregister_detector("Dream")
 # print(rule2.detector_list)
-
-
-
-
-# Import the class from the file
-# Dream = import_class_from_path(file_path, class_name)
-# print(Dream)
-# # for unit in s.compilation_units:
-# #     print(unit)
-# s.register_detector(Dream)
-# result =s.run_detectors()
-# print(result)

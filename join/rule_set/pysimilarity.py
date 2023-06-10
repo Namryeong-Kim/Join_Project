@@ -3,7 +3,6 @@ import difflib
 import os
 from tabulate import tabulate
 from colored import fg, attr
-from join.run_detectors.detectors import RunDetector
 
 class PySimilarity():
     def __init__(self, new_detector:str):
@@ -59,7 +58,7 @@ class PySimilarity():
         print(f"{self.new_detector} and {similar_detector} is similar\nSimilarity Ratio: {max_similarity_ratio}\n")
         print(table)
 
-        return similar_detector
+        return similar_detector, origin_detector_contents
     
     def _extract_class_names(self, target):
         file_name = os.path.basename(target)
@@ -67,7 +66,7 @@ class PySimilarity():
         return file_name_without_extension
 
 
-# file_ = PySimilarity("SuicidalModule.py")
+# file_ = PySimilarity("Reentrancy.py")
 # file_list =file_.get_files_in_directory()
 # file_.compare_files()
 
