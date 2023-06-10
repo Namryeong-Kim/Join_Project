@@ -3,6 +3,8 @@ import ast
 import slither.detectors.all_detectors as all_detectors
 import re
 from join.similarity.pysimilarity import PySimilarity
+from join.run_detectors.detectors import RunDetector
+from tabulate import tabulate
 
 class RuleSet(PySimilarity):
     detector_list=[]
@@ -95,7 +97,28 @@ class RuleSet(PySimilarity):
             print(f"{target} is not imported in all_detectors.py")
         return detector_path
 
+    def print_compared_files(self):
+        origin_detector, origin_detector_content = self.compare_files()
+        origin_result =RunDetector(self.example_path,[self.new_detector])
+        origin_result.get_all_detectors()
+        origin_result.register_detectors()
+        new_result = RunDetector(self.example_path,[origin_detector])
+        new_result.get_all_detectors()
+        new_result.register_detectors()
+        result = [
+            ["",self.new_detector[:-3], origin_detector],
+            ["Contents", self.new_detector_content, origin_detector_content],
+            ["Run Result", origin_result.run_detectors(), new_result.run_detectors()]
+        ]
+        table = tabulate(result, tablefmt="fancy_grid")
+        print(table)
+        # print(f"New Detector: {self.new_detector}")
+        # print(f"Similar Detector: {self.compare_files()}")
+        # print(f"New Detector Contents: {self.new_detector_content}")
+        # for self.compare_files() in self.get_files_in_directory():
 
+        # print(f"Similar Detector Contents: {self.read_file(self.compare_files())}")'
+        print(f"New Detector Result: ")
 rule=RuleSet("../compile/dream.py")
 print(rule.detector_list)   
 rule.register_detector()
