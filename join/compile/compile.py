@@ -1,29 +1,79 @@
 from join.compile.solc_parse.parser import parse as solc_parse
 import sys
-from slither.slither import Slither
 from crytic_compile import CryticCompile
-from pathlib import Path
 import os
-import importlib.util
-import ast
+import re
 from join.compile.solc_parse.parser_function import install_solc
 from solc_select.solc_select import switch_global_version
 
 
-class Join():
-    def __init__(self, target):
+class JoinCompile():
+    def __init__(self, target: str):
         # install_solc('0.8.20')
-        # switch_global_version('0.8.20', True)
-        self.target = target
-        self.target_path = os.path.abspath(os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), self.target))
+        # switch_global_version('0.8.20', True) -> requirements.txt에 추가
+        self.target_path = os.path.abspath(target)
+        self.target_list = []
+        self.target_versions = []
+        self.compilation_units = []
 
-        if (os.path.isdir(target)):
-            self.units = CryticCompile(self.target_path)
-        elif (os.path.isfile(target)):
-            if (target.endswith('.sol')):
+        # for i in self.units.compilation_units:
+        #     print(Slither(self.units.compilation_units[i].crytic_compile))
+        # super().__init__(self.units)
+    def find_all_solidity_files(self, extension):
+        sol_files = []
+        for root, dirs, files in os.walk(self.target_path):
+            for file in files:
+                if file.endswith(extension):
+                    file_path = os.path.join(root, file)
+                    sol_files.append(file_path)
+        return sol_files
+
+    def get_versions(self, file):
+        PATTERN = re.compile(
+            r"pragma solidity\s*(?:\^|>=|<=)?\s*(\d+\.\d+\.\d+)")
+        with open(file, encoding="utf8") as file_desc:
+            buf = file_desc.read()
+            result = PATTERN.findall(buf)
+        return result
+
+    def get_files_in_directory(self):
+        for root, dirs, files in os.walk(self.target_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                self.target_list.append(file_path)
+        return self.target_list
+
+    def get_crytic_compile_list(self, path):
+        self.compilation_units.append(CryticCompile(path))
+        return self.compilation_units
+
+    def get_minor_version(versions):
+        return sorted(versions)[0]
+
+    def select_compile_version(version):
+        try:
+            install_solc(version)
+            switch_global_version(version, True)
+        except:
+            print('Failed to switch compile versions')
+
+    def compile(self):
+        if os.path.isdir(self.target_path):
+            files = self.find_all_solidity_files(self.target_path, '.sol')
+            for i, file in files:
+                self.target_versions = self.get_versions(file)
+                print(self.target_versions)
+                selected_version = self.target_versions[i]
+                install_solc(selected_version)
+            for i, path in self.target_list:
+                selected_version = self.target_versions[ i]
+                switch_global_version(selected_version, True)
+                self.get_crytic_compile_list(path)
+            print(self.compilation_units)
+        elif (os.path.isfile(self.target_path)):
+            if (self.target_path.endswith('.sol')):
                 self.units = CryticCompile(self.target_path)
-            elif (target.endswith('.zip')):
+            elif (self.target_path.endswith('.zip')):
                 self.units = CryticCompile(self.target_path)
             else:
                 print('Not supported file type')
@@ -32,24 +82,6 @@ class Join():
             # solc_parse(target)
             print('Not supported file type')
             sys.exit(0)
-
-        # for i in self.units.compilation_units:
-        #     print(Slither(self.units.compilation_units[i].crytic_compile))
-        # super().__init__(self.units)
-
-    def import_class_from_path(file_path, class_name):
-        spec = importlib.util.spec_from_file_location("module.name", file_path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return getattr(module, class_name)
-
-    def get_files_in_directory(self):
-        file_list = []
-        for root, dirs, files in os.walk(self.target_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                file_list.append(file_path)
-        return file_list
 
     def functions(self):
         result = []
@@ -67,6 +99,7 @@ class Join():
 
 
 # s = Join('../src/')
-s = Join('example/')
-print(s.target_path)
+s = JoinCompile('./example/')
 print(s.get_files_in_directory())
+print(s.compile())
+print(s.target_list)
