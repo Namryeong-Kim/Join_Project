@@ -37,9 +37,7 @@ def parse_arguments():
     detect_subparsers = detect_parser.add_subparsers(
         dest='detect_command', required=True)
     vuln_parser = detect_subparsers.add_parser(
-        'vuln', help='Vulnerability detector')
-    # vuln_parser.add_argument(
-    #     'mode', choices=['group', 'specific'], default=None, nargs='?', help='Vulnerability detector type, defaults to all')
+        'vuln', help='Vulnerability detector, defaults to all')
     vuln_parser.add_argument('target', help='Target Rule', nargs='*')
     vuln_parser.add_argument('file_path', help='Path to the rule file')
     logic_parser = detect_subparsers.add_parser('logic', help='Logic detector')
@@ -51,7 +49,7 @@ def parse_arguments():
         parser.print_help(sys.stderr)
         sys.exit(1)
     args = parser.parse_args()
-    print(args)
+    # print(args)
     return args
 
 

@@ -4,7 +4,6 @@ join/__init__.py
 join/__main__.py
 join/compile/__init__.py
 join/compile/compile.py
-join/compile/dream.py
 join/compile/solc_parse/__init__.py
 join/compile/solc_parse/parser.py
 join/compile/solc_parse/parser_env.py
