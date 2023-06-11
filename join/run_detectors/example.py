@@ -1,5 +1,5 @@
 import argparse
-from join.compile.compile import Join
+from compile import Compile
 import time
 from colored import fg, attr
 from tabulate import tabulate
@@ -14,10 +14,11 @@ class Detector:
         self.parser.add_argument('detect', help='Select mode: print or detect')
         self.parser.add_argument('detection_type', choices=['vuln', 'logic'], help='Select detection type: vuln or logic')
         self.parser.add_argument('--detector', help='Select a Detector')
-        
+    
+
     def main(self):
         args = self.parser.parse_args()
-        compile = Join(args.target_file)
+        compile = Compile(args.target_file)
         slither = []
         for compilation_unit in compile.compile._compilation_units:
             for contract in compilation_unit.contracts:
@@ -25,6 +26,7 @@ class Detector:
                     for function in contract.functions:
                         if function.expressions:
                             slither.append({"function": function.name})
+
 
         if args.detection_type == 'vuln':
             res = self._detect_vulnerability(args.target_file, args.detector)
@@ -39,6 +41,7 @@ class Detector:
                 print("Error : This is not supported.")
         else:
             print("Error : This is not supported.")
+    
     
     def _detect_vulnerability(self, file, detector):
         cmd = f'slither {file}'

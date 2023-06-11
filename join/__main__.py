@@ -43,6 +43,23 @@ def parse_arguments():
     logic_parser = detect_subparsers.add_parser('logic', help='Logic detector')
     logic_parser.add_argument(
         'logic', choices=['Uniswap', 'Balancer', 'dydx'], help='Logic detector type')
+    
+    # Printer (Contract/Function/Variable/SlithIR)
+    print_parser = subparsers.add_parser('print')
+    print_subparsers = print_parser.add_subparsers(dest='print_command', required=True)
+    print_subparsers.add_parser('contract', help='Print contract')
+    print_subparsers.add_parser('function', help='Print function')
+    print_subparsers.add_parser('variable', help='Print variable')
+    print_subparsers.add_parser('slithir', help='Print SlithIR')
+
+    # Code Similar (Train/Test)
+    code_similar_parser = subparsers.add_parser('code-similar')
+    code_similar_parser.add_argument('mode', choices=['train', 'test'], help='Code Similar mode')
+    code_similar_parser.add_argument('--path', help='Path to the target file')
+    code_similar_parser.add_argument('--fname', help='File name of the target file')
+    code_similar_parser.add_argument('--detect', help='Directory containing code for detection')
+    code_similar_parser.add_argument('--bin', help='Path to the binary file')
+    code_similar_parser.add_argument('--contract', help='Directory containing contracts')
 
     # parser.add_argument('file_path', help=argparse.SUPPRESS, nargs='?')
     if len(sys.argv) == 1:

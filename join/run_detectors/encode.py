@@ -1,8 +1,7 @@
+import sys
 import logging
 import os
 from typing import Optional, Tuple, List
-import numpy as np
-import sys
 
 from slither import Slither
 from slither.core.declarations import (
@@ -54,6 +53,7 @@ from slither.slithir.variables import (
     Constant,
     ReferenceVariable,
 )
+from cache import load_cache
 
 simil_logger = logging.getLogger("Slither-simil")
 compiler_logger = logging.getLogger("CryticCompile")
@@ -149,7 +149,7 @@ def encode_ir(ir):  # pylint: disable=too-many-branches
     if isinstance(ir, Index):
         return f"index({ntype(ir.index_type)})"
     if isinstance(ir, Member):
-        return "member"
+        return "member"  # .format(ntype(ir._type))
     if isinstance(ir, Length):
         return "length"
     if isinstance(ir, Binary):
@@ -172,29 +172,29 @@ def encode_ir(ir):  # pylint: disable=too-many-branches
         return f"solidity_call({ir.function.full_name})"
     if isinstance(ir, InternalCall):
         return f"internal_call({ntype(ir.type_call)})"
-    if isinstance(ir, EventCall):
+    if isinstance(ir, EventCall):  # is this useful?
         return "event"
     if isinstance(ir, LibraryCall):
         return "library_call"
     if isinstance(ir, InternalDynamicCall):
         return "internal_dynamic_call"
-    if isinstance(ir, HighLevelCall):
+    if isinstance(ir, HighLevelCall):  # TODO: improve
         return "high_level_call"
-    if isinstance(ir, LowLevelCall):
+    if isinstance(ir, LowLevelCall):  # TODO: improve
         return "low_level_call"
     if isinstance(ir, TypeConversion):
         return f"type_conversion({ntype(ir.type)})"
-    if isinstance(ir, Return):
-        return "return"
+    if isinstance(ir, Return):  # this can be improved using values
+        return "return"  # .format(ntype(ir.type))
     if isinstance(ir, Transfer):
         return f"transfer({encode_ir(ir.call_value)})"
     if isinstance(ir, Send):
         return f"send({encode_ir(ir.call_value)})"
-    if isinstance(ir, Unpack):
+    if isinstance(ir, Unpack):  # TODO: improve
         return "unpack"
-    if isinstance(ir, InitArray):
+    if isinstance(ir, InitArray):  # TODO: improve
         return "init_array"
-    if isinstance(ir, Function):
+    if isinstance(ir, Function):  # TODO: investigate this
         return "function_solc"
 
     # variables
@@ -222,7 +222,6 @@ def encode_ir(ir):  # pylint: disable=too-many-branches
     return ""
 
 
-
 def encode_contract(cfilename, **kwargs):
     r = {}
 
@@ -235,10 +234,8 @@ def encode_contract(cfilename, **kwargs):
 
     # Iterate over all the contracts
     for contract in slither.contracts:
-
         # Iterate over all the functions
         for function in contract.functions_declared:
-
             if function.nodes == [] or function.is_constructor_variables:
                 continue
 
@@ -254,19 +251,3 @@ def encode_contract(cfilename, **kwargs):
                     for ir in node.irs:
                         r[x].append(encode_ir(ir))
     return r
-
-def load_cache(infile, nsamples=None):
-    cache = {}
-    with np.load(infile, allow_pickle=True) as data:
-        array = data["arr_0"][0]
-        for i, (x, y) in enumerate(array):
-            cache[x] = y
-            if i == nsamples:
-                break
-
-    return cache
-
-
-def save_cache(cache, outfile):
-    np.savez(outfile, [np.array(cache)])
-
