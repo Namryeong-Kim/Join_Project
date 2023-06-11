@@ -2,6 +2,7 @@ import argparse
 import sys
 from solc_select import solc_select
 from join.rule_set.rule import RuleSet
+from join.run_detectors.detectors import RunDetector
 
 
 def parse_arguments():
@@ -31,14 +32,26 @@ def parse_arguments():
     remove_parser = rule_subparsers.add_parser('remove', help='Remove a rule')
     remove_parser.add_argument('rule_name', help='Name of the rule to remove')
 
-    # ...
+    # Detector (Vulnerability/Logic)
+    detect_parser = subparsers.add_parser('detect')
+    detect_subparsers = detect_parser.add_subparsers(
+        dest='detect_command', required=True)
+    vuln_parser = detect_subparsers.add_parser(
+        'vuln', help='Vulnerability detector')
+    # vuln_parser.add_argument(
+    #     'mode', choices=['group', 'specific'], default=None, nargs='?', help='Vulnerability detector type, defaults to all')
+    vuln_parser.add_argument('target', help='Target Rule', nargs='*')
+    vuln_parser.add_argument('file_path', help='Path to the rule file')
+    logic_parser = detect_subparsers.add_parser('logic', help='Logic detector')
+    logic_parser.add_argument(
+        'logic', choices=['Uniswap', 'Balancer', 'dydx'], help='Logic detector type')
 
     # parser.add_argument('file_path', help=argparse.SUPPRESS, nargs='?')
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
         sys.exit(1)
     args = parser.parse_args()
-    print(args) 
+    print(args)
     return args
 
 
@@ -50,15 +63,25 @@ def version_info():
 
 
 def rule_set_action(action, target):
+    instance = RuleSet(target)
     if action == 'add':
-        instance = RuleSet(target)
         instance.register_detector()
         instance.print_compared_files()
         print(f"Adding ruleset for file: {target}")
     elif action == 'remove':
-        instance = RuleSet(target)
         instance.unregister_detector(target)
         print(f"Removing ruleset for file: {target}")
+
+
+def detect_vuln_action(target, file_path):
+    if not target:
+        print("Detecting all vulnerabilities")
+        instance = RunDetector(file_path)
+        instance.run_and_print_detectors()
+
+    else:
+        instance = RunDetector(file_path, target)
+        instance.run_and_print_detectors()
 
 
 def main():
@@ -74,6 +97,14 @@ def main():
             print("No target specified.")
             return
         rule_set_action(args.rule_command, target)
+    elif args.command == 'detect':
+        if args.detect_command == 'vuln':
+            detect_vuln_action(args.target, args.file_path)
+        elif args.detect_command == 'logic':
+            print(args.logic)
+        else:
+            print("No target specified.")
+            return
 
     # ...
 
