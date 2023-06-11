@@ -6,7 +6,6 @@ from rule_set.pysimilarity import PySimilarity
 from join.run_detectors.detectors import RunDetector
 from tabulate import tabulate
 
-
 class RuleSet():
     detector_list = []
 
@@ -17,7 +16,6 @@ class RuleSet():
             self.file_name = os.path.basename(target)
             self.class_name = self.extract_class_names()
             self.source = self.get_source_code(self.file_path)
-            self.py_similarity = PySimilarity(self.file_name)
         self.detector_list = self.get_all_detectors()
         self.detector_path = os.path.abspath(os.path.join(os.path.dirname(
             os.path.abspath(__file__)), "../../slither/slither/detectors/"))
@@ -104,8 +102,9 @@ class RuleSet():
         return detector_path
 
     def print_compared_files(self):
+        py_similarity = PySimilarity(self.file_name)
         (origin_detector, origin_detector_contents,
-         _) = self.py_similarity.compare_files()
+         _) = py_similarity.compare_files()
         example_path = os.path.abspath(os.path.join(os.path.dirname(
             os.path.abspath(__file__)), "rule_compare_examples", origin_detector + ".sol"))
 
@@ -114,7 +113,7 @@ class RuleSet():
         origin_detect_result = origin_result.run_detectors()
 
         new_result = RunDetector(
-            example_path, [self.py_similarity.new_detector[:-3]])
+            example_path, [py_similarity.new_detector[:-3]])
         new_result.register_detectors()
         new_detect_result = new_result.run_detectors()
 
@@ -122,7 +121,7 @@ class RuleSet():
         print("Origin Detector Result: \n")
         for result in origin_detect_result:
             print(result)
-        print("New Detector: ", self.py_similarity.new_detector[:-3])
+        print("New Detector: ", py_similarity.new_detector[:-3])
         print("New Detector Result: \n")
         for result in new_detect_result:
             print(result)

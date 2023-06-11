@@ -47,7 +47,6 @@ class Join():
         for unit in self.compilation_units:
             for func in unit.functions:
                 result.append(func)
-
         return result
 
     def ir(self):
