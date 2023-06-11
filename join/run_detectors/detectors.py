@@ -3,6 +3,7 @@ from slither.slither import Slither
 from slither.detectors import all_detectors
 import os
 import re
+from pathlib import Path
 
 
 class RunDetector(Slither):
@@ -12,9 +13,13 @@ class RunDetector(Slither):
         self._detectors = []
         (_, self.category, self.import_list) = self.get_all_detectors()
         self.selected_detectors = detectors if detectors is not None else []
-        self.file_path = os.path.abspath(os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), input_file))
+        # SOL_DIR = Path(__file__).resolve().parent.parent / \
+        #     "detect" / input_file
 
+        # self.file_path = SOL_DIR.as_posix()
+
+        self.file_path=os.path.abspath(input_file)
+   
         super().__init__(self.file_path)
 
     def get_all_detectors(self):
@@ -63,7 +68,7 @@ class RunDetector(Slither):
         for result in results:
             print(result)
 
-# d = RunDetector('./re-entrancy.sol')
+# d = RunDetector('./re-entrancy.sol', ['Reentrancy', 'Dream'])
 # d.register_detectors()
 # # print(d._detectors)
 # print(d.run_detectors())

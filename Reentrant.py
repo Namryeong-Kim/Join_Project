@@ -12,10 +12,11 @@ from slither.detectors.reentrancy.Reentrancy import Reentrancy, to_hashable
 from slither.utils.output import Output
 
 FindingKey = namedtuple("FindingKey", ["function", "calls", "send_eth"])
-FindingValue = namedtuple("FindingValue", ["variable", "node", "nodes", "cross_functions"])
+FindingValue = namedtuple(
+    "FindingValue", ["variable", "node", "nodes", "cross_functions"])
 
 
-class ReentrancyEth(Reentrancy):
+class Reentrant(Reentrancy):
     ARGUMENT = "reentrancy-eth"
     HELP = "Reentrancy vulnerabilities (theft of ethers)"
     IMPACT = DetectorClassification.HIGH
@@ -76,7 +77,8 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
                                     tuple(sorted(nodes, key=lambda x: x.node_id)),
                                     tuple(
                                         sorted(
-                                            variables_used_in_reentrancy[v], key=lambda x: str(x)
+                                            variables_used_in_reentrancy[v], key=lambda x: str(
+                                                x)
                                         )
                                     ),
                                 )
@@ -89,8 +91,10 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
                             # calls are ordered
                             finding_key = FindingKey(
                                 function=node.function,
-                                calls=to_hashable(node.context[self.KEY].calls),
-                                send_eth=to_hashable(node.context[self.KEY].send_eth),
+                                calls=to_hashable(
+                                    node.context[self.KEY].calls),
+                                send_eth=to_hashable(
+                                    node.context[self.KEY].send_eth),
                             )
 
                             result[finding_key] |= set(read_then_written)
@@ -104,13 +108,15 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
 
         results = []
 
-        result_sorted = sorted(list(reentrancies.items()), key=lambda x: x[0].function.name)
+        result_sorted = sorted(list(reentrancies.items()),
+                               key=lambda x: x[0].function.name)
         varsWritten: List[FindingValue]
         varsWrittenSet: Set[FindingValue]
         for (func, calls, send_eth), varsWrittenSet in result_sorted:
             calls = sorted(list(set(calls)), key=lambda x: x[0].node_id)
             send_eth = sorted(list(set(send_eth)), key=lambda x: x[0].node_id)
-            varsWritten = sorted(varsWrittenSet, key=lambda x: (x.variable.name, x.node.node_id))
+            varsWritten = sorted(varsWrittenSet, key=lambda x: (
+                x.variable.name, x.node.node_id))
 
             info = ["Reentrancy in ", func, ":\n"]
             info += ["\tExternal calls:\n"]
@@ -160,7 +166,8 @@ Bob uses the re-entrancy bug to call `withdrawBalance` two times, and withdraw m
             # If the calls are not the same ones that send eth, add the eth sending nodes.
             if calls != send_eth:
                 for (call_info, calls_list) in send_eth:
-                    res.add(call_info, {"underlying_type": "external_calls_sending_eth"})
+                    res.add(
+                        call_info, {"underlying_type": "external_calls_sending_eth"})
                     for call_list_info in calls_list:
                         if call_list_info != call_info:
                             res.add(

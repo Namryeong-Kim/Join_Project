@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity  ^0.8.1;
 
 contract EtherStore {
     mapping(address => uint) public balances;
@@ -8,7 +8,7 @@ contract EtherStore {
         balances[msg.sender] += msg.value;
     }
 
-    function DreamPlusAcademythdraw() public {
+    function withdraw() public {
         uint bal = balances[msg.sender];
         require(bal > 0);
 
@@ -16,6 +16,7 @@ contract EtherStore {
         require(sent, "Failed to send Ether");
 
         balances[msg.sender] = 0;
+        revert("revert");
     }
 
     // Helper function to check the balance of this contract

@@ -6,13 +6,13 @@ from rule_set.pysimilarity import PySimilarity
 from join.run_detectors.detectors import RunDetector
 from tabulate import tabulate
 
+
 class RuleSet():
     detector_list = []
 
     def __init__(self, target: str) -> None:
         if target.endswith(".py"):
-            self.file_path = os.path.abspath(os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), target))
+            self.file_path = os.path.abspath(target)
             self.file_name = os.path.basename(target)
             self.class_name = self.extract_class_names()
             self.source = self.get_source_code(self.file_path)
@@ -82,18 +82,13 @@ class RuleSet():
         import_line = re.findall(import_pattern, content)
         import_line = ''.join(import_line)
 
-        file_name_pattern = rf"from \.customized_rules\.(\w+) import {target}"
-        match = re.search(file_name_pattern, import_line)
-        if match:
-            result = match.group(1)
-
         content = content.split("\n")
 
         if import_line in content:
             content.remove(import_line)
             content.pop(0)
             detector_path = os.path.join(
-                self.detector_path, "customized_rules/", result+".py")
+                self.detector_path, "customized_rules/", target+".py")
             with open(all_detectors.__file__, "w") as file:
                 file.write('\n'.join(content))
             print(f"{target} is removed from all_detectors.py")
@@ -143,7 +138,7 @@ class RuleSet():
 # rule.print_compared_files()
 
 
-# rule2=RuleSet("Dream")
+# rule2 = RuleSet("Reentrant.py")
 # print(rule2.detector_list)
-# rule2.unregister_detector("Dream")
+# rule2.unregister_detector("Reentrant")
 # print(rule2.detector_list)

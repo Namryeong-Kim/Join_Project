@@ -18,11 +18,20 @@ class Join():
         self.target_path = os.path.abspath(os.path.join(
             os.path.dirname(os.path.abspath(__file__)), self.target))
 
-        # if (os.path.isdir(target)):
-        #     self.units = CryticCompile(self.target_path)
-        # else:
-        #     # solc_parse(target)
-        #     self.units = CryticCompile(self.target_path)
+        if (os.path.isdir(target)):
+            self.units = CryticCompile(self.target_path)
+        elif (os.path.isfile(target)):
+            if (target.endswith('.sol')):
+                self.units = CryticCompile(self.target_path)
+            elif (target.endswith('.zip')):
+                self.units = CryticCompile(self.target_path)
+            else:
+                print('Not supported file type')
+                sys.exit(0)
+        else:
+            # solc_parse(target)
+            print('Not supported file type')
+            sys.exit(0)
 
         # for i in self.units.compilation_units:
         #     print(Slither(self.units.compilation_units[i].crytic_compile))
