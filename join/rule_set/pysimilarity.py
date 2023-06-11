@@ -52,14 +52,17 @@ class PySimilarity():
                 max_similarity_ratio = similarity_ratio
                 similar_detector = self._extract_class_names(origin_detector)
 
+        print(f"{self.new_detector} and {similar_detector} is similar\nSimilarity Ratio: {max_similarity_ratio}\n")
+
+        return similar_detector, origin_detector_contents, data
+    
+
+    def print_diff(self, data):
         headers = ["Origin Detector", "Similarity Ratio"]
         table = tabulate(data, headers=headers, tablefmt="fancy_grid")
-
-        print(f"{self.new_detector} and {similar_detector} is similar\nSimilarity Ratio: {max_similarity_ratio}\n")
         print(table)
 
-        return similar_detector, origin_detector_contents
-    
+
     def _extract_class_names(self, target):
         file_name = os.path.basename(target)
         file_name_without_extension = os.path.splitext(file_name)[0]
@@ -68,5 +71,6 @@ class PySimilarity():
 
 # file_ = PySimilarity("Reentrancy.py")
 # file_list =file_.get_files_in_directory()
-# file_.compare_files()
+# similar_detector, origin_detector_contents, data =file_.compare_files()
+# print(file_.print_diff(data))
 

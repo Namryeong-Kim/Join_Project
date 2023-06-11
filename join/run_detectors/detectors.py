@@ -51,7 +51,7 @@ class RunDetector(Slither):
         return description
     
 
-d = RunDetector('./re-entrancy.sol')
-d.register_detectors()
-# print(d._detectors)
-print(d.run_detectors())
+# d = RunDetector('./re-entrancy.sol')
+# d.register_detectors()
+# # print(d._detectors)
+# print(d.run_detectors())
