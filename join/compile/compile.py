@@ -9,14 +9,16 @@ from join.compile.solc_parse.parser import parse as solc_parse
 
 
 
+
 class JoinCompile(SlitherCore):
     def __init__(self, target: str):
+        self._detectors = []
         self.target_path = os.path.abspath(target)
         super().__init__()
-        
+
         if os.path.isdir(self.target_path):
             self.target_list = self.find_all_solidity_files('.sol')
-            crytic_compile=self.get_crytic_compile_list()
+            crytic_compile = self.get_crytic_compile_list()
             self._crytic_compile = crytic_compile
 
         elif (os.path.isfile(self.target_path)):
@@ -88,7 +90,7 @@ class JoinCompile(SlitherCore):
                 if (installed_version == version):
                     return True
         return False
-    
+
     def parse(self, file_path):
         sign, version = self.get_versions(file_path)
         version_list = ps.get_version_list()
@@ -107,11 +109,11 @@ class JoinCompile(SlitherCore):
         elif (sign == '^' or sign == '~'):
             version = ps.get_highest_version(version_list, version)
         elif (sign == '=' or sign == '>=' or sign == '<=') or (not sign and version):
-            version = version 
+            version = version
         else:
             print("incorrect sign")
         return version
-        
+
     def get_crytic_compile_list(self):
         compilation_units = []
         version = '0.8.0'  # default
@@ -126,8 +128,3 @@ class JoinCompile(SlitherCore):
                 print('compile error')
 
         return compilation_units
-    
-
-target = sys.argv[1]
-file = JoinCompile(target)
-print(file._crytic_compile)

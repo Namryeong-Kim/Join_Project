@@ -1,8 +1,8 @@
-## setup.py
+# setup.py
 from setuptools import find_packages, setup
 
 setup(
-    name='join-analyzer',
+    name='dream-analyzer',
     version='0.1.0',
     packages=find_packages(),
     # install_requires=[
@@ -12,6 +12,6 @@ setup(
     #     'crytic-compile==0.1.0',
     # ],
     entry_points={
-        'console_scripts': ['sikk=join.__main__:main'],
+        'console_scripts': ['dream=join.__main__:main'],
     },
 )
