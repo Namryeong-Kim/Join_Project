@@ -145,9 +145,6 @@ def main() -> None:
     args = parse_args()
 
         # Access the solc_remaps attribute
-
-
-
     if args.filename.endswith('.zip'):
         temp_dir = 'temp'
         os.makedirs(temp_dir, exist_ok=True)
@@ -188,8 +185,6 @@ def main() -> None:
             print("The @openzeppelin folder is not found in any subdirectory.")
         args.solc_remaps = "@="+relative_path+"/@"
         
-
-
 
 
 

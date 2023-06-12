@@ -1,31 +1,34 @@
 import sys
-import re, os
+import re
+import os
 import json
 import requests
-import join.compile.solc_parse.parser_env as env
 from pathlib import Path
 
 
 def get_solidity_source(file_path):
-    #with open(sys.argv[1], 'r') as f:
+    # with open(sys.argv[1], 'r') as f:
     with open(file_path, 'r') as f:
         source_code = f.read()
     return source_code
 
+
 def get_version_list():
-    url = f"https://binaries.soliditylang.org/{env.soliditylang_platform()}/list.json"
+    url = f"https://binaries.soliditylang.org/macosx-amd64/list.json"
     list_json = requests.get(url).content
     releases = json.loads(list_json)["releases"]
     # available_releases = sorted(releases, key=lambda x: [int(v) for v in x.split('.')])
     # print(available_releases)
     return releases
 
+
 def check_version(version_list, version):
     for v in version:
         if v not in version_list:
-            return False   
+            return False
         else:
             return True
+
 
 def find_matching_index(versions, version_list):
     for i, v in enumerate(version_list):
@@ -75,19 +78,23 @@ def install_solc(version):
     artifact_file_dir = ARTIFACTS_DIR.joinpath(f"solc-{version}")
 
     artifacts = get_version_list()
-    url = f"https://binaries.soliditylang.org/{env.soliditylang_platform()}/"+artifacts.get(version)
+    url = f"https://binaries.soliditylang.org/macosx-amd64/" + \
+        artifacts.get(version)
     Path.mkdir(artifact_file_dir, parents=True, exist_ok=True)
     print(f"Installing solc '{version}'...")
-    #urllib.request.urlretrieve(url, artifact_file_dir.joinpath(f"solc-{version}"))
+    # urllib.request.urlretrieve(url, artifact_file_dir.joinpath(f"solc-{version}"))
 
     response = requests.get(url)
     with open(artifact_file_dir.joinpath(f"solc-{version}"), "wb") as file:
         file.write(response.content)
 
-    #verify_checksum(version)
+    # verify_checksum(version)
     # Path.chmod(artifact_file_dir.joinpath(f"solc-{version}"), 0o775)
 
     file_path = artifact_file_dir.joinpath(f"solc-{version}")
     os.chmod(file_path, 0o775)
     print(f"Version '{version}' installed.")
     return True
+
+
+install_solc('0.7.3')

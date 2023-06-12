@@ -439,7 +439,7 @@ class Flattening:
             self._export_path.mkdir(parents=True)
 
         exports: List[Export] = []
-        if target is None:
+        if target is None: # OneFile만 남기기 
             if strategy == Strategy.MostDerived:
                 exports = self._export_all()
             elif strategy == Strategy.OneFile:

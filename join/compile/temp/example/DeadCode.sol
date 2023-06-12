@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity <0.7.6; 
+pragma solidity ^0.7.0;
+
 contract Test {
     
     address payable public owner;

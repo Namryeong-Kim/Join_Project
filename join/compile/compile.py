@@ -74,6 +74,7 @@ class JoinCompile():
             if (self.target_path.endswith('.sol')):
                 self.units = CryticCompile(self.target_path)
             elif (self.target_path.endswith('.zip')):
+                
                 self.units = CryticCompile(self.target_path)
             else:
                 print('Not supported file type')
@@ -103,3 +104,4 @@ s = JoinCompile('./example/')
 print(s.get_files_in_directory())
 print(s.compile())
 print(s.target_list)
+
