@@ -3,8 +3,8 @@ import sys
 from crytic_compile import CryticCompile
 import os
 import re
-from join.compile.solc_parse.parser_function import install_solc
 from solc_select.solc_select import switch_global_version
+import join.compile.solc_parse.parser_function as ps
 
 
 class JoinCompile():
@@ -29,12 +29,10 @@ class JoinCompile():
         return sol_files
 
     def get_versions(self, file):
-        PATTERN = re.compile(
-            r"pragma solidity\s*(?:\^|>=|<=)?\s*(\d+\.\d+\.\d+)")
-        with open(file, encoding="utf8") as file_desc:
-            buf = file_desc.read()
-            result = PATTERN.findall(buf)
-        return result
+        content = ps.get_solidity_source(file)
+        sign, version = ps.parse_solidity_version(content)
+        print(sign, version)
+        return sign, version
 
     def get_files_in_directory(self):
         for root, dirs, files in os.walk(self.target_path):
@@ -50,23 +48,45 @@ class JoinCompile():
     def get_minor_version(versions):
         return sorted(versions)[0]
 
+    def parse(self, file_path):
+        sign, version = self.get_versions(file_path)
+
+        if len(version) != 1:
+            sign, version = ps.compare_version(sign, version)
+        sign = sign[0]
+        version = version[0]
+
+        index = ps.find_matching_index(version, version_list)
+
+        if sign == '<':
+            version = version_list[index - 1]
+        elif sign == '>':
+            version = version_list[index + 1]
+        elif (sign == '^' or sign == '~'):
+            version = ps.get_highest_version(version_list, version)
+        elif (sign == '=' or sign == '>=' or sign == '<=') or (not sign and version):
+            version = version
+        else:
+            print("incorrect sign")
+            return
+
     def select_compile_version(version):
         try:
-            install_solc(version)
+            ps.install_solc(version)
             switch_global_version(version, True)
         except:
             print('Failed to switch compile versions')
 
     def compile(self):
         if os.path.isdir(self.target_path):
-            files = self.find_all_solidity_files(self.target_path, '.sol')
+            files = self.find_all_solidity_files('.sol')
             for i, file in files:
                 self.target_versions = self.get_versions(file)
                 print(self.target_versions)
                 selected_version = self.target_versions[i]
-                install_solc(selected_version)
+                ps.install_solc(selected_version)
             for i, path in self.target_list:
-                selected_version = self.target_versions[ i]
+                selected_version = self.target_versions[i]
                 switch_global_version(selected_version, True)
                 self.get_crytic_compile_list(path)
             print(self.compilation_units)
@@ -74,7 +94,7 @@ class JoinCompile():
             if (self.target_path.endswith('.sol')):
                 self.units = CryticCompile(self.target_path)
             elif (self.target_path.endswith('.zip')):
-                
+
                 self.units = CryticCompile(self.target_path)
             else:
                 print('Not supported file type')
@@ -104,4 +124,3 @@ s = JoinCompile('./example/')
 print(s.get_files_in_directory())
 print(s.compile())
 print(s.target_list)
-

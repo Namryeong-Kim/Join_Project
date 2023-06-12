@@ -6,6 +6,7 @@ import requests
 from pathlib import Path
 
 
+
 def get_solidity_source(file_path):
     # with open(sys.argv[1], 'r') as f:
     with open(file_path, 'r') as f:
@@ -49,7 +50,6 @@ def parse_solidity_version(source_code):
             sign.append(condition_match[0].strip()
                         if condition_match[0] else "")
             version.append(condition_match[1].strip())
-    print(sign, version)
     return sign, version
 
 
@@ -95,6 +95,3 @@ def install_solc(version):
     os.chmod(file_path, 0o775)
     print(f"Version '{version}' installed.")
     return True
-
-
-install_solc('0.7.3')
